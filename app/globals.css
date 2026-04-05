@@ -1,0 +1,24 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@layer utilities {
+  .satin-sheen {
+    background: linear-gradient(135deg, rgba(192,57,43,1) 0%, rgba(142,19,12,1) 50%, rgba(192,57,43,1) 100%);
+  }
+  .gold-leaf-border {
+    border-image: linear-gradient(to right, #efc20a, #cfa700, #ffe084) 1;
+  }
+  .yunwen-bg {
+    background-image: radial-gradient(circle at 2px 2px, rgba(238, 194, 9, 0.1) 1px, transparent 0);
+    background-size: 24px 24px;
+  }
+  .shrine-glow {
+    box-shadow: 0 0 30px rgba(192, 57, 43, 0.4);
+  }
+  .talisman-texture {
+    background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCyCfYuMbIx-QLEeVDE5Opjz-2JVLtB44XEq7InzzjNcbvp5FQKd2e1WseOlJVGaU3CovdoXCV6UQWUQNcLK-e2RTjitOMWIyxK8dvxT0d_X3jOXV3qQyOffTYjSCcTOHysJoUcTKRvw0aRjN_wH2IiIuIk7DYGWl9oDE6cCifdE_1SyaetwHPFP05Cp4oZb8LEHxsmkVncvmXWrQV1P1N8Yg0H8bwNLdq6DqVZgwrl3j7hR-ecR64iFqJpg1KpRZiEXlYpEz2hv45O');
+  }
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
