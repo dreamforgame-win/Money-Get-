@@ -128,8 +128,8 @@ export default function PachinkoGame() {
     if (!containerRef.current) return;
 
     const engine = Matter.Engine.create();
-    // 掉落速度减少20% (默认 gravity.y 是 1)
-    engine.gravity.y = 0.8;
+    // 提高垂直重力 (默认 gravity.y 是 1, 之前是 0.8)
+    engine.gravity.y = 1.2;
     engine.gravity.x = 0; // Disable global horizontal gravity
     engineRef.current = engine;
     const world = engine.world;
@@ -154,8 +154,8 @@ export default function PachinkoGame() {
     const wallOptions = { isStatic: true, render: { fillStyle: '#1c1917' } };
     Matter.Composite.add(world, [
       Matter.Bodies.rectangle(width / 2, height + 10, width, 20, { ...wallOptions, label: 'floor' }),
-      Matter.Bodies.rectangle(-10, height / 2, 20, height, wallOptions),
-      Matter.Bodies.rectangle(width + 10, height / 2, 20, height, wallOptions),
+      Matter.Bodies.rectangle(-10, height / 2, 20, height, { ...wallOptions, label: 'wall' }),
+      Matter.Bodies.rectangle(width + 10, height / 2, 20, height, { ...wallOptions, label: 'wall' }),
     ]);
 
     // Golden Gates (Added before pegs so they render behind)
@@ -242,6 +242,8 @@ export default function PachinkoGame() {
           const isPegB = bodyB.label === 'peg';
           const isFloorA = bodyA.label === 'floor';
           const isFloorB = bodyB.label === 'floor';
+          const isWallA = bodyA.label === 'wall';
+          const isWallB = bodyB.label === 'wall';
           const isGateA = bodyA.label.startsWith('gate_');
           const isGateB = bodyB.label.startsWith('gate_');
 
@@ -348,11 +350,12 @@ export default function PachinkoGame() {
         }
         
         const bricks = Matter.Composite.allBodies(world).filter((b) => b.label === 'brick');
-        // Apply gyroscope force to bricks
+        // 进一步减少水平陀螺仪力 (之前是 0.005)
         bricks.forEach(brick => {
-          Matter.Body.applyForce(brick, brick.position, { x: gyroGravityXRef.current * 0.005, y: 0 });
+          Matter.Body.applyForce(brick, brick.position, { x: gyroGravityXRef.current * 0.002, y: 0 });
         });
         
+        // 砖块碰到墙壁不消失，只在超出数量时移除
         if (bricks.length > 520) {
           Matter.Composite.remove(world, bricks.slice(0, bricks.length - 520));
         }
