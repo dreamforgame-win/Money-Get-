@@ -350,10 +350,6 @@ export default function PachinkoGame() {
         }
         
         const bricks = Matter.Composite.allBodies(world).filter((b) => b.label === 'brick');
-        // 进一步减少水平陀螺仪力 (之前是 0.005)
-        bricks.forEach(brick => {
-          Matter.Body.applyForce(brick, brick.position, { x: gyroGravityXRef.current * 0.002, y: 0 });
-        });
         
         // 砖块碰到墙壁不消失，只在超出数量时移除
         if (bricks.length > 520) {
