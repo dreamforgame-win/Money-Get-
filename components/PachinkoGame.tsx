@@ -38,8 +38,9 @@ export default function PachinkoGame() {
     const handleOrientation = (event: DeviceOrientationEvent) => {
       const gamma = event.gamma;
       if (gamma !== null) {
-        let gravityX = gamma / 30;
-        gravityX = Math.max(-1.5, Math.min(1.5, gravityX));
+        // Map -90 to 90 to -0.75 to 0.75
+        let gravityX = gamma / 60;
+        gravityX = Math.max(-0.75, Math.min(0.75, gravityX));
         gyroGravityXRef.current = gravityX;
       }
     };
