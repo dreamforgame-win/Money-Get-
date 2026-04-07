@@ -30,6 +30,7 @@ export default function PachinkoGame() {
     gameOver: false,
   });
   const gyroGravityXRef = useRef(0);
+  const gyroGravityYRef = useRef(1.2);
   const gyroEnabledRef = useRef(false);
 
   const enableGyro = async () => {
@@ -38,10 +39,11 @@ export default function PachinkoGame() {
     const handleOrientation = (event: DeviceOrientationEvent) => {
       const gamma = event.gamma;
       if (gamma !== null) {
-        // Map -90 to 90 to -0.75 to 0.75
-        let gravityX = gamma / 60;
-        gravityX = Math.max(-0.75, Math.min(0.75, gravityX));
-        gyroGravityXRef.current = gravityX;
+        // Convert gamma (degrees) to radians
+        const radians = gamma * (Math.PI / 180);
+        const magnitude = 1.2; // Base gravity magnitude
+        gyroGravityXRef.current = Math.sin(radians) * magnitude;
+        gyroGravityYRef.current = Math.cos(radians) * magnitude;
       }
     };
 
@@ -360,8 +362,14 @@ export default function PachinkoGame() {
       }
     };
 
+    const handleBeforeUpdate = () => {
+      engine.gravity.x = gyroGravityXRef.current;
+      engine.gravity.y = gyroGravityYRef.current;
+    };
+
     Matter.Events.on(engine, 'collisionStart', handleCollision);
     Matter.Events.on(engine, 'afterUpdate', handleAfterUpdate);
+    Matter.Events.on(engine, 'beforeUpdate', handleBeforeUpdate);
 
     Matter.Render.run(render);
     const runner = Matter.Runner.create();
@@ -376,6 +384,7 @@ export default function PachinkoGame() {
       Matter.Engine.clear(engine);
       Matter.Events.off(engine, 'collisionStart', handleCollision);
       Matter.Events.off(engine, 'afterUpdate', handleAfterUpdate);
+      Matter.Events.off(engine, 'beforeUpdate', handleBeforeUpdate);
     };
   }, []);
 
