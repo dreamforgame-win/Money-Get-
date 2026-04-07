@@ -43,7 +43,7 @@ export default function PachinkoGame() {
         const radians = gamma * (Math.PI / 180);
         const magnitude = 1.2; // Base gravity magnitude
         gyroGravityXRef.current = Math.sin(radians) * magnitude;
-        gyroGravityYRef.current = Math.cos(radians) * magnitude;
+        gyroGravityYRef.current = magnitude; // Keep vertical gravity constant
       }
     };
 
