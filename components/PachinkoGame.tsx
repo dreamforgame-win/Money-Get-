@@ -39,18 +39,11 @@ export default function PachinkoGame() {
     const handleOrientation = (event: DeviceOrientationEvent) => {
       const gamma = event.gamma;
       if (gamma !== null) {
-        // 限制倾斜角度，防止极端值
-        const clampedGamma = Math.max(-60, Math.min(60, gamma));
-        const radians = clampedGamma * (Math.PI / 180);
-        const magnitude = 1.2; // 基础垂直重力
-        
-        // 核心优化：
-        // 游戏中的钉子会大幅减缓金币的垂直下落速度，但不会阻挡水平移动。
-        // 如果直接使用真实的水平重力，金币会因为水平速度过快而“横向乱飞”，导致轨迹偏离真实的物理地面。
-        // 因此，我们需要大幅缩小水平重力的敏感度（乘以 0.25），
-        // 使其与被减缓的垂直速度相匹配，从而在视觉上保持“垂直于地面”的下落轨迹。
-        gyroGravityXRef.current = Math.sin(radians) * magnitude * 0.25;
-        gyroGravityYRef.current = magnitude; // 保持垂直重力恒定
+        // Convert gamma (degrees) to radians
+        const radians = gamma * (Math.PI / 180);
+        const magnitude = 1.2; // Base gravity magnitude
+        gyroGravityXRef.current = Math.sin(radians) * magnitude;
+        gyroGravityYRef.current = magnitude; // Keep vertical gravity constant
       }
     };
 
